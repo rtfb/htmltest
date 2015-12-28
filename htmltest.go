@@ -71,7 +71,7 @@ func CurlPost(url string) string {
 }
 
 func PostForm(path string, values *url.Values) (string, error) {
-	resp, err := tclient.PostForm(localhostURL(path), *values)
+	resp, err := tclient.PostForm(PathToURL(path), *values)
 	defer resp.Body.Close()
 	if err != nil {
 		return "", err
@@ -80,20 +80,20 @@ func PostForm(path string, values *url.Values) (string, error) {
 	return string(body), err
 }
 
-func localhostURL(u string) string {
-	if u == "" {
+func PathToURL(path string) string {
+	if path == "" {
 		return tserver.URL
-	} else if u[0] == '/' {
-		return tserver.URL + u
+	} else if path[0] == '/' {
+		return tserver.URL + path
 	} else {
-		return tserver.URL + "/" + u
+		return tserver.URL + "/" + path
 	}
 }
 
 func tclientGet(rqURL string) (*http.Response, error) {
-	return tclient.Get(localhostURL(rqURL))
+	return tclient.Get(PathToURL(rqURL))
 }
 
 func tclientPostForm(rqURL string) (*http.Response, error) {
-	return tclient.PostForm(localhostURL(rqURL), url.Values{})
+	return tclient.PostForm(PathToURL(rqURL), url.Values{})
 }
